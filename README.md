@@ -1,21 +1,11 @@
-<p align="center">
-<img height="200" src="./assets/kv.png" alt="to unocss">
-</p>
-<p align="center"> English | <a href="./README_zh.md">简体中文</a></p>
+## 根据swagger文档，生成基于@umijs/max项目的CRUD页面（弹窗）
 
+### 安装插件
 
-## :coffee:
+### 配置插件
 
-[buy me a cup of coffee](https://github.com/Simon-He95/sponsor)
+### 使用插件
 
-## License
+### 生成的页面
 
-[MIT](./license)
-
-## Sponsors
-
-<p align="center">
-  <a href="https://cdn.jsdelivr.net/gh/Simon-He95/sponsor/sponsors.svg">
-    <img src="https://cdn.jsdelivr.net/gh/Simon-He95/sponsor/sponsors.png"/>
-  </a>
-</p>
+### FAQ

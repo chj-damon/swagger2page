@@ -53,7 +53,7 @@
     }
   },
   "scripts": {
-    "dev": "pnpm build --watch",
+    "dev": "pnpm build --watch --sourcemap",
     "test": "vitest",
     "build": "tsup src/index.ts --external vscode",
     "pack": "vsce package --no-dependencies",

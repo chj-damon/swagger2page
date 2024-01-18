@@ -1,23 +1,19 @@
 {
   "publisher": "simonhe",
-  "name": "vitesse",
-  "displayName": "vitesse",
+  "name": "swagger2page",
+  "displayName": "swagger2page",
   "version": "0.0.0",
   "packageManager": "pnpm@8.10.5",
-  "description": "vitesse",
-  "author": "Simon He <https://github.com/Simon-He95>",
+  "description": "a vscode extension to help developers create CRUD pages in umijs/max project based on swagger",
+  "author": "chj-damon <https://github.com/chj-damon>",
   "license": "MIT",
-  "funding": "https://github.com/sponsors/Simon-He95",
-  "homepage": "https://github.com/Simon-He95/vitesse#readme",
+  "homepage": "https://github.com/chj-damon/swagger2page#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Simon-He95/vitesse"
+    "url": "https://github.com/chj-damon/swagger2page"
   },
   "bugs": {
-    "url": "https://github.com/Simon-He95/vitesse/issues"
-  },
-  "sponsor": {
-    "url": "https://github.com/Simon-He95/sponsor"
+    "url": "https://github.com/chj-damon/swagger2page/issues"
   },
   "categories": [
     "Other"
@@ -33,6 +29,29 @@
   "activationEvents": [
     "onStartupFinished"
   ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "getFileState",
+        "title": "File State"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "getFileState",
+          "when": "editorFocus",
+          "group": "navigation"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "getFileState",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
   "scripts": {
     "dev": "pnpm build --watch",
     "test": "vitest",

@@ -30,24 +30,21 @@
     "onStartupFinished"
   ],
   "contributes": {
-    "commands": [
-      {
-        "command": "getFileState",
-        "title": "File State"
-      }
-    ],
-    "menus": {
-      "editor/context": [
+    "viewsContainers": {
+      "activitybar": [
         {
-          "command": "getFileState",
-          "when": "editorFocus",
-          "group": "navigation"
+          "id": "todolist-container",
+          "title": "todolist",
+          "icon": "assets/logo.svg"
         }
-      ],
-      "explorer/context": [
+      ]
+    },
+    "views": {
+      "todolist-container": [
         {
-          "command": "getFileState",
-          "group": "navigation"
+          "id": "todolist-view",
+          "name": "列表",
+          "type": "webview"
         }
       ]
     }

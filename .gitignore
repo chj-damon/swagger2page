@@ -6,6 +6,8 @@
 *.vsix
 coverage
 dist
+out
+build
 lib-cov
 logs
 node_modules

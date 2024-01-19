@@ -4,7 +4,7 @@ export default defineConfig({
   entry: [
     'src/index.ts',
   ],
-  outDir: 'out',
+  outDir: 'dist',
   format: ['cjs'],
   shims: false,
   dts: false,

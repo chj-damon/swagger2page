@@ -29,6 +29,8 @@
       vscode.setState({ todos: state })
       input.value = ''
     }
+
+    vscode.postMessage({ type: 'webview' })
   }
 
   function createTodo(text, finished, id) {

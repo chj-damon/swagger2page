@@ -5,3 +5,5 @@ test
 .vscode
 assets
 scripts
+web/**
+!web/dist/**

@@ -18,9 +18,9 @@
   "categories": [
     "Other"
   ],
-  "main": "./out/index.js",
+  "main": "./dist/index.js",
   "files": [
-    "out",
+    "dist",
     "build"
   ],
   "engines": {
@@ -57,7 +57,9 @@
     "lint:fix": "eslint . --fix",
     "publish": "vsce publish --no-dependencies",
     "typecheck": "tsc --noEmit",
-    "release": "bumpp && pnpm run publish"
+    "release": "bumpp && pnpm run publish",
+    "web-build": "pnpm --filter web build",
+    "web-dev": "pnpm --filter web dev"
   },
   "devDependencies": {
     "@simon_he/eslint-config": "^0.0.6",

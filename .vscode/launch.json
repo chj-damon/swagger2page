@@ -1,5 +1,17 @@
 {
   "version": "0.2.0",
+  "compounds": [
+    {
+      "name": "Debug Extension",
+      "configurations": [
+        "Extension",
+        "Webview"
+      ],
+      "presentation": {
+        "order": 0
+      }
+    }
+  ],
   "configurations": [
     {
       "name": "Extension",
@@ -10,10 +22,16 @@
         "--extensionDevelopmentPath=${workspaceFolder}"
       ],
       "outFiles": [
-        "${workspaceFolder}/out/**/*.js"
+        "${workspaceFolder}/dist/**/*.js"
       ],
       "preLaunchTask": "npm: dev",
       "sourceMaps": true
+    },
+    {
+      "name": "Webview",
+      "type": "node",
+      "request": "attach",
+      "preLaunchTask": "npm: web-dev"
     }
   ]
 }

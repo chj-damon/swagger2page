@@ -1,0 +1,70 @@
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 9999;
+}
+::view-transition-new(root) {
+  z-index: 1;
+}
+.dark::view-transition-old(root) {
+  z-index: 1;
+}
+.dark::view-transition-new(root) {
+  z-index: 9999;
+}
+
+#root {
+  height: 100vh;
+
+  .ant-layout .ant-layout-sider {
+    padding-bottom: 60px;
+  }
+  .ant-layout .ant-layout-sider-trigger {
+    position: absolute;
+    height: 60px;
+    line-height: 60px;
+  }
+
+  .runtime-keep-alive-tabs-layout,
+  .runtime-keep-alive-layout {
+    .ant-tabs-nav {
+      margin: 0;
+    }
+    .ant-tabs-ink-bar {
+      visibility: visible !important;
+    }
+
+    .ant-tabs-nav-list {
+      .ant-tabs-tab-active {
+        .ant-tabs-tab-btn {
+          text-shadow: none;
+        }
+      }
+    }
+  }
+
+  .runtime-keep-alive-layout {
+    width: auto !important;
+    height: calc(100% - 40px) !important;
+
+    .ant-card-body, .ant-tabs, .ant-tabs-content, .ant-tabs-tabpane, .ant-spin-nested-loading, .ant-spin-container {
+      height: 100%;
+    }
+
+    .ant-table-wrapper .ant-table-column-title {
+      z-index: auto;
+    }
+
+    .ant-btn:empty {
+      width: 0;
+      visibility: hidden;
+      display: inline-block;
+      margin: 0;
+      padding: 0;
+      border: none;
+    }
+  }
+}

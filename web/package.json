@@ -1,0 +1,35 @@
+{
+  "name": "web",
+  "version": "0.0.0",
+  "description": "web for swagger2page",
+  "private": true,
+  "author": "damon.chen <chj_0507_dz@sina.com>",
+  "scripts": {
+    "dev": "umi dev",
+    "build": "umi build",
+    "postinstall": "umi setup",
+    "setup": "umi setup",
+    "start": "npm run dev"
+  },
+  "dependencies": {
+    "@alita/plugins": "3.3.7",
+    "@ant-design/icons": "^5.2.6",
+    "@ant-design/pro-components": "^2.6.43",
+    "@ebay/nice-modal-react": "^1.2.13",
+    "@umijs/max": "^4.1.1",
+    "ahooks": "^3.7.8",
+    "antd": "^5.11.2",
+    "antd-style": "^3.5.2",
+    "lodash-es": "^4.17.21",
+    "normalize.css": "^8.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.3",
+    "@babel/preset-env": "^7.23.3",
+    "@babel/preset-typescript": "^7.23.3",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "babel-plugin-antd-style": "^1.0.4",
+    "typescript": "^5.3.3"
+  }
+}

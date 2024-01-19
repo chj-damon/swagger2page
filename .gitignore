@@ -13,3 +13,12 @@ logs
 node_modules
 temp
 .eslintcache
+
+.env.local
+.umirc.local.ts
+config/*
+.umi
+.umi-production
+.umi-test
+.swc
+

@@ -1,4 +1,5 @@
-import { type CancellationToken, type ExtensionContext, Uri, type WebviewView, type WebviewViewProvider, type WebviewViewResolveContext, window } from 'vscode'
+import path from 'node:path';
+import { type CancellationToken, type ExtensionContext, Uri, type WebviewView, type WebviewViewProvider, type WebviewViewResolveContext, window, WebviewPanel } from 'vscode'
 
 export class TodoListWebView implements WebviewViewProvider {
   public static viewId = 'todolist-view'
@@ -8,6 +9,9 @@ export class TodoListWebView implements WebviewViewProvider {
   ) {
     // ...
   }
+
+  // 追踪当前webview面板
+  private currentPanel: WebviewPanel | undefined = undefined;
 
   resolveWebviewView(webviewView: WebviewView): void | Thenable<void> {
     webviewView.webview.options = {
@@ -46,11 +50,72 @@ export class TodoListWebView implements WebviewViewProvider {
       switch (message.type) {
         case 'alert':
           window.showInformationMessage(message.text)
-          break
+          break;
+
+        case 'webview':
+          // 判断currentPanel是否有值
+          if (this.currentPanel) {
+            const columnToShowIn = window.activeTextEditor ? window.activeTextEditor.viewColumn : undefined;
+            // 如果有的话，就显示，然后激活
+            this.currentPanel.reveal(columnToShowIn)
+          } else {
+            // 如果没有的话，就创建一个新的webview
+            this.createWebviewPanel()
+          }
+          break;
 
         default:
           break
       }
     })
+  }
+
+  createWebviewPanel() {
+    // 创建一个webviewPanel
+    this.currentPanel = window.createWebviewPanel(
+      'webview',
+      'webview',
+      { viewColumn: 1, preserveFocus: true },
+      {
+        enableScripts: true,
+        retainContextWhenHidden: true,
+      }
+    );
+    this.currentPanel.iconPath = Uri.file(
+      path.join(this.context.extensionPath, 'assets', 'icon.svg')
+    )
+    this.currentPanel.webview.html = this.getUmiContent();
+  }
+
+  /**
+   * 获取基于umijs的webview内容
+   * @returns string
+   */
+  getUmiContent() {
+    const getDiskPath = (filename: string) => {
+      return this.currentPanel?.webview.asWebviewUri(
+        Uri.file(
+          path.join(this.context.extensionPath, 'web', 'build', filename)
+        )
+      )
+    }
+
+    return `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+          <meta http-equiv="X-UA-Compatible" content="ie=edge">
+          <link rel="shortcut icon" href="/favicon.png">
+          <title>swagger2page</title>
+          <link rel="stylesheet" href="${getDiskPath('umi.css')}">
+        </head>
+        <body>
+          <div id="root"></div>
+          <script src="${getDiskPath('umi.js')}"></script>
+        </body>
+      </html>
+    `;
   }
 }

@@ -1,5 +1,459 @@
 ## 根据swagger文档，生成基于@umijs/max项目的CRUD页面(弹窗)
 
+### 原理解析
+
+swagger文档是一个json文件，里面包含了接口的详细信息，我们可以根据这些信息，生成对应的页面。
+一个典型的openapi文档结构如下：
+```json
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "管理后台",
+    "description": "提供管理员管理的所有功能",
+    "contact": {},
+    "license": {},
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/admin-api/product/warehouse/base/update": {
+      "put": {
+        "tags": [
+          "管理后台 - 仓库管理"
+        ],
+        "summary": "更新仓库",
+        "operationId": "updateWarehouse",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "仓库id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 1112
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "仓库名称",
+            "required": true,
+            "schema": {
+              "maxLength": 20,
+              "minLength": 0,
+              "type": "string"
+            }
+          },
+          {
+            "name": "remark",
+            "in": "query",
+            "description": "备注",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "phone",
+            "in": "query",
+            "description": "仓库电话",
+            "required": false,
+            "schema": {
+              "maxLength": 20,
+              "minLength": 0,
+              "type": "string"
+            }
+          },
+          {
+            "name": "locationProvince",
+            "in": "query",
+            "description": "所属省编码",
+            "required": false,
+            "schema": {
+              "maxLength": 10,
+              "minLength": 0,
+              "type": "string"
+            }
+          },
+          {
+            "name": "locationCity",
+            "in": "query",
+            "description": "所属市编码",
+            "required": false,
+            "schema": {
+              "maxLength": 10,
+              "minLength": 0,
+              "type": "string"
+            }
+          },
+          {
+            "name": "locationDistinct",
+            "in": "query",
+            "description": "所属区编码",
+            "required": false,
+            "schema": {
+              "maxLength": 10,
+              "minLength": 0,
+              "type": "string"
+            }
+          },
+          {
+            "name": "addressDetail",
+            "in": "query",
+            "description": "详细地址",
+            "required": false,
+            "schema": {
+              "maxLength": 10,
+              "minLength": 0,
+              "type": "string"
+            }
+          },
+          {
+            "name": "owner",
+            "in": "query",
+            "description": "负责人",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "warehouseType",
+            "in": "query",
+            "description": "仓库类型，0总仓、1补货员仓、2设备仓",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "ownerId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommonResultBoolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rpc-api/product/warehouse/create": {
+      "post": {
+        "tags": [
+          "RPC 服务 - 仓库Warehouse API 接口"
+        ],
+        "summary": "创建仓库",
+        "operationId": "createWarehouse",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "仓库名称",
+            "required": true,
+            "schema": {
+              "maxLength": 20,
+              "minLength": 0,
+              "type": "string"
+            }
+          },
+          {
+            "name": "remark",
+            "in": "query",
+            "description": "备注",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "phone",
+            "in": "query",
+            "description": "仓库电话",
+            "required": false,
+            "schema": {
+              "maxLength": 20,
+              "minLength": 0,
+              "type": "string"
+            }
+          },
+          {
+            "name": "locationProvince",
+            "in": "query",
+            "description": "所属省编码",
+            "required": false,
+            "schema": {
+              "maxLength": 10,
+              "minLength": 0,
+              "type": "string"
+            }
+          },
+          {
+            "name": "locationCity",
+            "in": "query",
+            "description": "所属市编码",
+            "required": false,
+            "schema": {
+              "maxLength": 10,
+              "minLength": 0,
+              "type": "string"
+            }
+          },
+          {
+            "name": "locationDistinct",
+            "in": "query",
+            "description": "所属区编码",
+            "required": false,
+            "schema": {
+              "maxLength": 10,
+              "minLength": 0,
+              "type": "string"
+            }
+          },
+          {
+            "name": "addressDetail",
+            "in": "query",
+            "description": "详细地址",
+            "required": false,
+            "schema": {
+              "maxLength": 10,
+              "minLength": 0,
+              "type": "string"
+            }
+          },
+          {
+            "name": "owner",
+            "in": "query",
+            "description": "负责人",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "warehouseType",
+            "in": "query",
+            "description": "仓库类型，0总仓、1补货员仓、2设备仓",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "ownerId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/app-api/product/spu/list": {
+      "get": {
+        "tags": [
+          "用户 APP - 商品 SPU"
+        ],
+        "summary": "获得商品 SPU 列表",
+        "operationId": "getSpuList_1",
+        "parameters": [
+          {
+            "name": "recommendType",
+            "in": "query",
+            "description": "推荐类型",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "description": "数量",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommonResultListAppProductSpuPageRespVO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/app-api/product/spu/get-detail": {
+      "get": {
+        "tags": [
+          "用户 APP - 商品 SPU"
+        ],
+        "summary": "获得商品 SPU 明细",
+        "operationId": "getSpuDetail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "编号",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommonResultAppProductSpuDetailRespVO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/app-api/product/favorite/delete": {
+      "delete": {
+        "tags": [
+          "用户 APP - 商品收藏"
+        ],
+        "summary": "取消单个商品收藏",
+        "operationId": "deleteFavorite",
+        "parameters": [
+          {
+            "name": "spuId",
+            "in": "query",
+            "description": "商品 SPU 编号",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "description": "商品 SPU 编号",
+              "example": 29502
+            },
+            "example": 29502
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommonResultBoolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CommonResultBoolean": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "data": {
+            "type": "boolean"
+          },
+          "msg": {
+            "type": "string"
+          }
+        }
+      },
+      "CommonResultListAppProductSpuPageRespVO": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AppProductSpuPageRespVO"
+            }
+          },
+          "msg": {
+            "type": "string"
+          }
+        }
+      },
+      "CommonResultAppProductSpuDetailRespVO": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "data": {
+            "$ref": "#/components/schemas/AppProductSpuDetailRespVO"
+          },
+          "msg": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
+```
+- `info`: 表示这个文档的基本信息，包括标题、描述、联系人、许可证、版本等
+- `paths`: 表示接口的路径，每个路径下面包含了接口的请求方式、请求参数、响应参数等
+- `components`: 表示接口的组件，包括请求参数、响应参数等
+
+根据`paths`和`components`，我们可以解析得到某个接口的请求参数、响应参数等信息，然后根据这些信息，生成对应的页面。
+最典型的，根据`paths`中的`get`请求，我们可以生成一个查询页面，根据`paths`中的`post`请求，我们可以生成一个新增页面，根据`paths`中的`put`请求，我们可以生成一个修改页面，根据`paths`中的`delete`请求，我们可以生成一个删除页面。
+
+然后，我们把这些数据用可视化的方式展示出来，用户可以根据自己的需求，对即将生成的页面进行定制化修改，然后点击生成按钮，就可以得到对应的页面了。
+
 ### 安装插件
 
 ### 配置插件

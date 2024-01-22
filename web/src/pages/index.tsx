@@ -1,16 +1,17 @@
-import { useNavigate } from '@umijs/max';
-import { Button } from 'antd';
+import { useContext } from 'react';
+import styles from './index.less';
+import { MessageContext } from '@/context/MessageContext';
 
-export default function HomePage() {
-  const navigate = useNavigate();
-
+export default function IndexPage() {
+  const messageData = useContext(MessageContext);
+  console.log(messageData, 'messageData');
   return (
     <div>
-      <h2>Yay! Welcome to umi!</h2>
-      <Button onClick={() => navigate('/docs')}>docs</Button>
-      <p>
-        To get started, edit <code>pages/index.tsx</code> and save to reload.
-      </p>
+      <h1 className={styles.title}>Page index</h1>
+      <p className={styles.title}>vscode传来的消息</p>
+      {messageData.map((message, index) => (
+        <p key={index}>{JSON.stringify(message)}</p>
+      ))}
     </div>
   );
 }

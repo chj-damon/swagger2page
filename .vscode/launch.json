@@ -3,10 +3,7 @@
   "compounds": [
     {
       "name": "Debug Extension",
-      "configurations": [
-        "Extension",
-        "Webview"
-      ],
+      "configurations": ["Extension", "Webview", "Sidebar"],
       "presentation": {
         "order": 0
       }
@@ -18,12 +15,8 @@
       "type": "extensionHost",
       "request": "launch",
       "runtimeExecutable": "${execPath}",
-      "args": [
-        "--extensionDevelopmentPath=${workspaceFolder}"
-      ],
-      "outFiles": [
-        "${workspaceFolder}/dist/**/*.js"
-      ],
+      "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "preLaunchTask": "npm: dev",
       "sourceMaps": true
     },
@@ -32,6 +25,12 @@
       "type": "node",
       "request": "attach",
       "preLaunchTask": "npm: web-dev"
+    },
+    {
+      "name": "Sidebar",
+      "type": "node",
+      "request": "attach",
+      "preLaunchTask": "npm: sidebar-dev"
     }
   ]
 }

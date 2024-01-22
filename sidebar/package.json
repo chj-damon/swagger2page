@@ -1,8 +1,8 @@
 {
   "private": true,
-  "name": "web",
+  "name": "sidebar",
   "version": "0.0.0",
-  "description": "web for swagger2page",
+  "description": "sidebar for swagger2page",
   "author": "damon.chen <chj_0507_dz@sina.com>",
   "scripts": {
     "dev": "umi dev",
@@ -24,7 +24,6 @@
     "@umijs/preset-react": "1.x",
     "@umijs/test": "^3.5.41",
     "lint-staged": "^10.0.7",
-    "prettier": "^2.2.0",
     "typescript": "^4.1.2",
     "yorkie": "^2.0.0"
   }

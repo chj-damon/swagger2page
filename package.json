@@ -19,10 +19,6 @@
     "Other"
   ],
   "main": "./dist/index.js",
-  "files": [
-    "dist",
-    "build"
-  ],
   "engines": {
     "vscode": "^1.84.2"
   },
@@ -33,16 +29,16 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "todolist-container",
-          "title": "todolist",
+          "id": "swagger2page-container",
+          "title": "swagger2page",
           "icon": "assets/logo.svg"
         }
       ]
     },
     "views": {
-      "todolist-container": [
+      "swagger2page-container": [
         {
-          "id": "todolist-view",
+          "id": "swagger2page-view",
           "name": "列表",
           "type": "webview"
         }
@@ -51,15 +47,18 @@
   },
   "scripts": {
     "dev": "pnpm build --watch --sourcemap",
-    "build": "tsup src/index.ts --external vscode",
+    "build": "tsup",
     "pack": "vsce package --no-dependencies",
     "lint": "eslint . --cache",
     "lint:fix": "eslint . --fix",
+    "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'",
     "publish": "vsce publish --no-dependencies",
-    "typecheck": "tsc --noEmit",
+    "tsc": "tsc --noEmit",
     "release": "bumpp && pnpm run publish",
     "web-build": "pnpm --filter web build",
-    "web-dev": "pnpm --filter web dev"
+    "web-dev": "pnpm --filter web dev",
+    "sidebar-build": "pnpm --filter sidebar build",
+    "sidebar-dev": "pnpm --filter sidebar dev"
   },
   "devDependencies": {
     "@simon_he/eslint-config": "^0.0.6",
@@ -69,11 +68,24 @@
     "bumpp": "^9.2.0",
     "eslint": "^8.54.0",
     "esno": "^0.16.3",
+    "lint-staged": "^10.0.7",
+    "prettier": "^2.2.0",
     "pnpm": "^8.10.5",
     "rimraf": "^4.4.1",
     "tsup": "^6.7.0",
     "typescript": "^5.3.2",
     "vite": "^4.5.0",
     "vsce": "^2.15.0"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,jsx,less,md,json}": [
+      "prettier --write"
+    ],
+    "*.ts?(x)": [
+      "prettier --parser=typescript --write"
+    ]
   }
 }

@@ -14,7 +14,7 @@ export default ({ children }: IRouteComponentProps) => {
   // 监听vscode传来的消息
   useEffect(() => {
     window.addEventListener('message', (event) => {
-      const message = event.data; // 从插件过来的数据
+      const message = event.data; // The JSON data our extension sent
       switch (message.type) {
         case 'init':
           setMessageData(message.data);

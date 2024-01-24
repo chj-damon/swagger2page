@@ -1,12 +1,14 @@
 import {
-  type ExtensionContext,
   Uri,
+  Webview,
+  WebviewPanel,
+  window,
+  workspace,
+  type ExtensionContext,
   type WebviewView,
   type WebviewViewProvider,
-  window,
-  WebviewPanel,
-  Webview,
 } from 'vscode';
+import { generateFileByTemplate } from './utils/generate';
 import { parseOpenapi } from './utils/openapi';
 
 export class SidebarWebView implements WebviewViewProvider {
@@ -114,7 +116,7 @@ export class SidebarWebView implements WebviewViewProvider {
       this.selectedContent = undefined;
     });
 
-    this.currentPanel.webview.onDidReceiveMessage((message) => {
+    this.currentPanel.webview.onDidReceiveMessage(async (message) => {
       switch (message.type) {
         case 'init':
           // 在webview初始化成功之后，把选中的某个接口的数据传递过去
@@ -123,6 +125,50 @@ export class SidebarWebView implements WebviewViewProvider {
             data: this.selectedContent,
           });
           break;
+
+        case 'generate':
+          console.log(message.data);
+          const workspaceFolderUri = workspace.workspaceFolders
+            ? workspace.workspaceFolders[0].uri
+            : undefined;
+
+          const uris = await window.showOpenDialog({
+            canSelectFolders: true,
+            canSelectFiles: false,
+            canSelectMany: false,
+            title: '选择生成目录',
+            openLabel: '选择',
+            // defaultUri取插件所在项目的根目录
+            defaultUri: workspaceFolderUri
+              ? Uri.joinPath(workspaceFolderUri, 'src')
+              : undefined,
+          });
+          if (uris && uris.length > 0) {
+            const selectedFilePath = uris[0].fsPath;
+            // 开始根据message.data，以及对应的template，生成文件
+            try {
+              const templatePath = Uri.joinPath(
+                this.context.extensionUri,
+                'src',
+                'templates',
+              ).fsPath;
+              const filePath = await generateFileByTemplate(
+                selectedFilePath,
+                templatePath,
+                message.data,
+              );
+              if (!filePath) {
+                window.showErrorMessage('生成失败');
+              } else {
+                window.showInformationMessage('生成成功');
+                // vscode打开这个刚刚生成的文件
+                const openPath = Uri.file(filePath);
+                await window.showTextDocument(openPath);
+              }
+            } catch (error) {
+              window.showErrorMessage((error as unknown as Error).message);
+            }
+          }
 
         default:
           break;

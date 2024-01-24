@@ -1,5 +1,5 @@
 import { message } from '@vscode-use/utils';
-import { type Disposable, type ExtensionContext, window } from 'vscode';
+import { window, type Disposable, type ExtensionContext } from 'vscode';
 import { SidebarWebView } from './SidebarWebView';
 
 /**

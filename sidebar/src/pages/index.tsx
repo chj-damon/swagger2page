@@ -1,13 +1,13 @@
 import { vscode } from '@/constant';
-import styles from './index.less';
-import { Button, Tree } from 'antd';
-import { useContext } from 'react';
 import { MessageContext } from '@/context/MessageContext';
+import { Tree } from 'antd';
+import { useContext } from 'react';
+import styles from './index.less';
 
+import deletePng from '@/assets/delete.png';
 import getPng from '@/assets/get.png';
 import postPng from '@/assets/post.png';
 import putPng from '@/assets/put.png';
-import deletePng from '@/assets/delete.png';
 
 const iconMapping = {
   get: getPng,

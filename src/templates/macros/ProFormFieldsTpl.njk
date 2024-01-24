@@ -1,0 +1,321 @@
+{% macro text(name, title, inForm, required) %}
+<ProFormText
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}
+
+{% macro captcha(name, title, inForm, required) %}
+<ProFormCaptcha
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}
+
+{% macro password(name, title, inForm, required) %}
+<ProFormText.Password
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}
+
+{% macro digit(name, title, inForm, required) %}
+<ProFormDigit
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}
+
+{% macro digitRange(name, title, inForm, required) %}
+<ProFormDigitRange
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}
+
+{% macro textArea(name, title, inForm, required) %}
+<ProFormTextArea
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}
+
+{% macro date(name, title, inForm, required) %}
+<ProFormDatePicker
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}
+
+{% macro dateTime(name, title, inForm, required) %}
+<ProFormDateTimePicker
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}
+
+{% macro dateRange(name, title, inForm, required) %}
+<ProFormDateRangePicker
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}
+
+{% macro dateTimeRange(name, title, inForm, required) %}
+<ProFormDateTimeRangePicker
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}
+
+{% macro time(name, title, inForm, required) %}
+<ProFormTimePicker
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}
+
+{% macro select(name, title, inForm, required) %}
+<ProFormSelect
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}
+
+{% macro treeSelect(name, title, inForm, required) %}
+<ProFormTreeSelect
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}
+
+{% macro checkbox(name, title, inForm, required) %}
+<ProFormCheckbox
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}
+
+{% macro radio(name, title, inForm, required) %}
+<ProFormRadio.Group
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}
+
+{% macro cascader(name, title, inForm, required) %}
+<ProFormCascader
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}
+
+{% macro slider(name, title, inForm, required) %}
+<ProFormSlider
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}
+
+{% macro switch(name, title, inForm, required) %}
+<ProFormSwitch
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}
+
+{% macro rate(name, title, inForm, required) %}
+<ProFormRate
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}
+
+{% macro uploadButton(name, title, inForm, required) %}
+<ProFormUploadButton
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}
+
+{% macro uploadDragger(name, title, inForm, required) %}
+<ProFormUploadDragger
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}
+
+{% macro money(name, title, inForm, required) %}
+<ProFormMoney
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}
+
+{% macro segment(name, title, inForm, required) %}
+<ProFormSegmented
+  name="{{name}}"
+  label="{{title}}"
+  placeholder="请输入{{title}}"
+  {% if inForm %}
+    readonly
+  {% elif required %}
+    required
+    rules={[{ required: true, message: '{{title}}不能为空' }]}
+  {% endif %}
+/>
+{% endmacro %}

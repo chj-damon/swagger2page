@@ -1,0 +1,131 @@
+{% import "./macros/ProFormFieldsTpl.njk" as fields %}
+
+import { useRef } from 'react';
+import {
+  ProCard,
+  ProForm,
+  ProFormInstance,
+  {{generateImportStr(config)}}
+} from '@ant-design/pro-components';
+import NiceModal, { useModal } from '@ebay/nice-modal-react';
+import { useRequest } from 'ahooks';
+import { Flex, Modal } from 'antd';
+
+{# 需要配置到对应的接口 #}
+
+import Title from '@/components/Title';
+
+const {{name}} = (props: { id?: string }) => {
+  const modal = useModal();
+  const formRef = useRef<ProFormInstance>();
+
+  const { data } = useRequest(() => getApplyStatus({ id: props.id! }), {
+    ready: !!props.id && modal.visible,
+    refreshDeps: [props.id, modal.visible],
+    onSuccess(data) {
+      formRef.current?.setFieldsValue(data.data);
+    },
+  });
+  const detail = data?.data;
+
+  return (
+    <Modal
+      title={'申请状态'}
+      width={1200}
+      centered
+      destroyOnClose
+      forceRender
+      open={modal.visible}
+      onCancel={modal.hide}
+      maskClosable={false}
+      okText="确定"
+      onOk={modal.hide}
+    >
+      <ProForm
+        layout="horizontal"
+        formRef={formRef}
+        labelCol={% raw %}{{ span: 6 }}{% endraw %}
+        wrapperCol={% raw %}{{ span: 18 }}{% endraw %}
+        submitter={false}
+      >
+        <Flex gap={16}>
+          <ProCard bordered headerBordered title={<Title text="基本信息" />} style={% raw %}{{ flex: 1 }}{% endraw %}>
+            {% for item in config %}
+              {% if item.componentType == 'text' %}
+                {{ fields.text(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+              {% if item.componentType == 'captcha' %}
+                {{ fields.captcha(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+              {% if item.componentType == 'password' %}
+                {{ fields.password(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+              {% if item.componentType == 'digit' %}
+                {{ fields.digit(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+              {% if item.componentType == 'digitRange' %}
+                {{ fields.digitRange(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+              {% if item.componentType == 'textarea' %}
+                {{ fields.textarea(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+              {% if item.componentType == 'date' %}
+                {{ fields.date(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+              {% if item.componentType == 'dateTime' %}
+                {{ fields.dateTime(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+              {% if item.componentType == 'dateRange' %}
+                {{ fields.dateRange(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+              {% if item.componentType == 'dateTimeRange' %}
+                {{ fields.dateTimeRange(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+              {% if item.componentType == 'time' %}
+                {{ fields.time(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+              {% if item.componentType == 'select' %}
+                {{ fields.select(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+              {% if item.componentType == 'treeSelect' %}
+                {{ fields.treeSelect(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+              {% if item.componentType == 'checkbox' %}
+                {{ fields.checkbox(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+              {% if item.componentType == 'radio' %}
+                {{ fields.radio(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+              {% if item.componentType == 'cascader' %}
+                {{ fields.cascader(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+              {% if item.componentType == 'slider' %}
+                {{ fields.slider(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+              {% if item.componentType == 'switch' %}
+                {{ fields.switch(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+              {% if item.componentType == 'rate' %}
+                {{ fields.rate(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+              {% if item.componentType == 'uploadButton' %}
+                {{ fields.uploadButton(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+              {% if item.componentType == 'uploadDragger' %}
+                {{ fields.uploadDragger(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+              {% if item.componentType == 'money' %}
+                {{ fields.money(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+              {% if item.componentType == 'segment' %}
+                {{ fields.segment(item.name, item.title, inForm, item.required) }}
+              {% endif %}
+            {% endfor %}
+          </ProCard>
+        </Flex>
+      </ProForm>
+    </Modal>
+  );
+};
+
+export default NiceModal.create({{name}});

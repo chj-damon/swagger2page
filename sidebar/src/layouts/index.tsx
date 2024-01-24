@@ -1,10 +1,10 @@
 import { vscode } from '@/constant';
 import { MessageContext } from '@/context/MessageContext';
-import { useEffect, useState } from 'react';
-import { IRouteComponentProps } from 'umi';
+import { Outlet } from '@umijs/max';
 import { TreeProps } from 'antd';
+import { useEffect, useState } from 'react';
 
-export default ({ children }: IRouteComponentProps) => {
+export default () => {
   const [treeData, setTreeData] = useState<TreeProps['treeData']>([]);
   const [paths, setPaths] = useState<OpenAPIPathMapValue[]>([]);
 
@@ -31,7 +31,7 @@ export default ({ children }: IRouteComponentProps) => {
 
   return (
     <MessageContext.Provider value={{ treeData, paths }}>
-      {children}
+      <Outlet />
     </MessageContext.Provider>
   );
 };

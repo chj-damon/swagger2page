@@ -1,9 +1,9 @@
 import { vscode } from '@/constant';
 import { MessageContext } from '@/context/MessageContext';
+import { Outlet } from '@umijs/max';
 import { useEffect, useState } from 'react';
-import { IRouteComponentProps } from 'umi';
 
-export default ({ children }: IRouteComponentProps) => {
+export default () => {
   const [pathInfo, setPathInfo] = useState<OpenAPIPathMapValue | undefined>(
     undefined,
   );
@@ -29,7 +29,7 @@ export default ({ children }: IRouteComponentProps) => {
 
   return (
     <MessageContext.Provider value={{ pathInfo }}>
-      {children}
+      <Outlet />
     </MessageContext.Provider>
   );
 };

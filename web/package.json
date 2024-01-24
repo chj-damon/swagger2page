@@ -5,28 +5,30 @@
   "description": "web for swagger2page",
   "author": "damon.chen <chj_0507_dz@sina.com>",
   "scripts": {
-    "dev": "umi dev",
+    "dev": "max dev",
+    "build": "max build",
+    "postinstall": "max setup",
+    "setup": "max setup",
     "start": "npm run dev",
-    "build": "HTML=none umi build",
-    "postinstall": "umi generate tmp"
+    "tsc": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@ant-design/pro-components": "^2.6.48",
+    "@ebay/nice-modal-react": "^1.2.13",
+    "@ant-design/icons": "^5.2.6",
+    "ahooks": "^3.7.8",
+    "antd": "^5.13.2",
+    "antd-style": "^3.5.2",
+    "jotai": "^2.5.1",
     "normalize.css": "^8.0.1",
-    "react": "17.x",
-    "react-dom": "17.x",
-    "umi": "^3.5.41",
-    "antd": "^5.x"
+    "@ant-design/pro-components": "^2.6.48",
+    "@umijs/max": "^4.1.1"
   },
   "devDependencies": {
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
-    "@types/vscode-webview": "^1.57.4",
-    "@umijs/preset-react": "1.x",
-    "@umijs/test": "^3.5.41",
-    "lint-staged": "^10.0.7",
-    "prettier": "^2.2.0",
-    "typescript": "^4.1.2",
-    "yorkie": "^2.0.0"
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "babel-plugin-antd-style": "^1.0.4",
+    "babel-plugin-dynamic-import-node": "^2.3.3",
+    "typescript": "^5.3.3",
+    "@types/vscode-webview": "^1.57.4"
   }
 }

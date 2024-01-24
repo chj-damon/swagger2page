@@ -1,9 +1,6 @@
 import { defineConfig } from 'umi';
 
 export default defineConfig({
-  nodeModulesTransform: {
-    type: 'none',
-  },
   base: '/',
   publicPath: '/',
   outputPath: './build',
@@ -15,13 +12,16 @@ export default defineConfig({
       routes: [{ exact: true, path: '/', component: '@/pages/index' }],
     },
   ],
-  fastRefresh: {},
-  dynamicImport: false,
+  antd: {},
+  access: {},
+  model: {},
+  initialState: {},
+  request: {},
   history: {
     type: 'memory',
   },
-  devServer: {
-    writeToDisk: (filePath: string) =>
-      ['umi.js', 'umi.css'].some((name) => filePath.endsWith(name)),
-  },
+  mfsu: false,
+  writeToDisk: true,
+  extraBabelPlugins: ['babel-plugin-dynamic-import-node'], // 配置了这个之后就只会有一个js和css文件
+  devtool: false,
 });

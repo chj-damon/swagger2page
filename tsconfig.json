@@ -3,13 +3,14 @@
     "target": "esnext",
     "lib": ["esnext"],
     "module": "esnext",
+    "jsx": "react-jsx",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "strict": true,
     "strictNullChecks": true,
     "esModuleInterop": true,
     "skipDefaultLibCheck": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
   },
-  "exclude": ["web"]
+  "exclude": ["web", "sidebar"],
 }

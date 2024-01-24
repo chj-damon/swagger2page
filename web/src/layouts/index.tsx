@@ -4,7 +4,9 @@ import { useEffect, useState } from 'react';
 import { IRouteComponentProps } from 'umi';
 
 export default ({ children }: IRouteComponentProps) => {
-  const [messageData, setMessageData] = useState([]);
+  const [pathInfo, setPathInfo] = useState<OpenAPIPathMapValue | undefined>(
+    undefined,
+  );
 
   // 在系统初始化时，向vscode发送消息
   useEffect(() => {
@@ -17,7 +19,7 @@ export default ({ children }: IRouteComponentProps) => {
       const message = event.data; // 从插件过来的数据
       switch (message.type) {
         case 'init':
-          setMessageData(message.data);
+          setPathInfo(message.data);
           break;
         default:
           break;
@@ -26,7 +28,7 @@ export default ({ children }: IRouteComponentProps) => {
   }, []);
 
   return (
-    <MessageContext.Provider value={messageData}>
+    <MessageContext.Provider value={{ pathInfo }}>
       {children}
     </MessageContext.Provider>
   );

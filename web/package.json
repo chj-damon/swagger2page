@@ -11,11 +11,12 @@
     "postinstall": "umi generate tmp"
   },
   "dependencies": {
-    "@ant-design/pro-layout": "^6.5.0",
+    "@ant-design/pro-components": "^2.6.48",
     "normalize.css": "^8.0.1",
     "react": "17.x",
     "react-dom": "17.x",
-    "umi": "^3.5.41"
+    "umi": "^3.5.41",
+    "antd": "^5.x"
   },
   "devDependencies": {
     "@types/react": "^17.0.0",

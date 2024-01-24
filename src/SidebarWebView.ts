@@ -19,6 +19,9 @@ export class SidebarWebView implements WebviewViewProvider {
   // 追踪当前webview面板
   private currentPanel: WebviewPanel | undefined = undefined;
 
+  // 追踪当前选中的接口
+  private selectedContent: OpenAPIPathMapValue | undefined = undefined;
+
   resolveWebviewView(webviewView: WebviewView): void | Thenable<void> {
     const buildFolder = ['sidebar', 'build'];
     const cssUri = this.getDiskPath(
@@ -36,11 +39,11 @@ export class SidebarWebView implements WebviewViewProvider {
     };
     webviewView.webview.html = this.getWebviewContent(cssUri, jsUri);
 
-    webviewView.webview.onDidReceiveMessage((message) => {
+    webviewView.webview.onDidReceiveMessage(async (message) => {
       switch (message.type) {
         // sidebar的webview已经初始化好，这个时候在vscode侧开始做openapi的解析
         case 'init':
-          const result = parseOpenapi();
+          const result = await parseOpenapi();
           webviewView.webview.postMessage({
             type: 'init',
             data: result,
@@ -52,6 +55,7 @@ export class SidebarWebView implements WebviewViewProvider {
           break;
 
         case 'webview':
+          this.selectedContent = message.data;
           // 判断currentPanel是否有值
           if (this.currentPanel) {
             const columnToShowIn = window.activeTextEditor
@@ -107,6 +111,7 @@ export class SidebarWebView implements WebviewViewProvider {
 
     this.currentPanel.onDidDispose(() => {
       this.currentPanel = undefined;
+      this.selectedContent = undefined;
     });
 
     this.currentPanel.webview.onDidReceiveMessage((message) => {
@@ -115,7 +120,7 @@ export class SidebarWebView implements WebviewViewProvider {
           // 在webview初始化成功之后，把选中的某个接口的数据传递过去
           this.currentPanel!.webview.postMessage({
             type: 'init',
-            data: [{ name: 'test', url: 'test' }],
+            data: this.selectedContent,
           });
           break;
 

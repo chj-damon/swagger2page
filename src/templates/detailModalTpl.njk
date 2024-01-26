@@ -1,32 +1,31 @@
 {% import "./macros/ProFormFieldsTpl.njk" as fields %}
 
 import { useRef } from 'react';
+
 import {
-  ProCard,
   ProForm,
   ProFormInstance,
   {{generateImportStr(config)}}
 } from '@ant-design/pro-components';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import { useRequest } from 'ahooks';
-import { Flex, Modal } from 'antd';
+import { Flex, Modal, Row, Col } from 'antd';
 
-{# 需要配置到对应的接口 #}
-
-import Title from '@/components/Title';
+import { {{requestName}} } from '{{apiImportPath}}';
 
 const {{name}} = (props: { id?: string }) => {
   const modal = useModal();
   const formRef = useRef<ProFormInstance>();
 
-  const { data } = useRequest(() => getApplyStatus({ id: props.id! }), {
-    ready: !!props.id && modal.visible,
-    refreshDeps: [props.id, modal.visible],
-    onSuccess(data) {
-      formRef.current?.setFieldsValue(data.data);
+  const { data, loading } = useRequest(
+    () => {{requestName}}({% raw %}{{ id: props.id! }}{% endraw %}),
+    {
+      ready: !!props.id && modal.visible,
+      onSuccess: (result) => {
+        formRef.current?.setFieldsValue(result.data);
+      },
     },
-  });
-  const detail = data?.data;
+  );
 
   return (
     <Modal
@@ -48,81 +47,83 @@ const {{name}} = (props: { id?: string }) => {
         wrapperCol={% raw %}{{ span: 18 }}{% endraw %}
         submitter={false}
       >
-        <Flex gap={16}>
-          <ProCard bordered headerBordered title={<Title text="基本信息" />} style={% raw %}{{ flex: 1 }}{% endraw %}>
-            {% for item in config %}
+        {% for list in items %}
+          <Row gutter={16}>
+          {% for item in list %}
+            <Col span={{ colSpan | curly }}>
               {% if item.componentType == 'text' %}
-                {{ fields.text(item.name, item.title, inForm, item.required) }}
+                {{ fields.text(item.name, item.title, true, item.required) }}
               {% endif %}
               {% if item.componentType == 'captcha' %}
-                {{ fields.captcha(item.name, item.title, inForm, item.required) }}
+                {{ fields.captcha(item.name, item.title, true, item.required) }}
               {% endif %}
               {% if item.componentType == 'password' %}
-                {{ fields.password(item.name, item.title, inForm, item.required) }}
+                {{ fields.password(item.name, item.title, true, item.required) }}
               {% endif %}
               {% if item.componentType == 'digit' %}
-                {{ fields.digit(item.name, item.title, inForm, item.required) }}
+                {{ fields.digit(item.name, item.title, true, item.required) }}
               {% endif %}
               {% if item.componentType == 'digitRange' %}
-                {{ fields.digitRange(item.name, item.title, inForm, item.required) }}
+                {{ fields.digitRange(item.name, item.title, true, item.required) }}
               {% endif %}
               {% if item.componentType == 'textarea' %}
-                {{ fields.textarea(item.name, item.title, inForm, item.required) }}
+                {{ fields.textarea(item.name, item.title, true, item.required) }}
               {% endif %}
               {% if item.componentType == 'date' %}
-                {{ fields.date(item.name, item.title, inForm, item.required) }}
+                {{ fields.date(item.name, item.title, true, item.required) }}
               {% endif %}
               {% if item.componentType == 'dateTime' %}
-                {{ fields.dateTime(item.name, item.title, inForm, item.required) }}
+                {{ fields.dateTime(item.name, item.title, true, item.required) }}
               {% endif %}
               {% if item.componentType == 'dateRange' %}
-                {{ fields.dateRange(item.name, item.title, inForm, item.required) }}
+                {{ fields.dateRange(item.name, item.title, true, item.required) }}
               {% endif %}
               {% if item.componentType == 'dateTimeRange' %}
-                {{ fields.dateTimeRange(item.name, item.title, inForm, item.required) }}
+                {{ fields.dateTimeRange(item.name, item.title, true, item.required) }}
               {% endif %}
               {% if item.componentType == 'time' %}
-                {{ fields.time(item.name, item.title, inForm, item.required) }}
+                {{ fields.time(item.name, item.title, true, item.required) }}
               {% endif %}
               {% if item.componentType == 'select' %}
-                {{ fields.select(item.name, item.title, inForm, item.required) }}
+                {{ fields.select(item.name, item.title, true, item.required) }}
               {% endif %}
               {% if item.componentType == 'treeSelect' %}
-                {{ fields.treeSelect(item.name, item.title, inForm, item.required) }}
+                {{ fields.treeSelect(item.name, item.title, true, item.required) }}
               {% endif %}
               {% if item.componentType == 'checkbox' %}
-                {{ fields.checkbox(item.name, item.title, inForm, item.required) }}
+                {{ fields.checkbox(item.name, item.title, true, item.required) }}
               {% endif %}
               {% if item.componentType == 'radio' %}
-                {{ fields.radio(item.name, item.title, inForm, item.required) }}
+                {{ fields.radio(item.name, item.title, true, item.required) }}
               {% endif %}
               {% if item.componentType == 'cascader' %}
-                {{ fields.cascader(item.name, item.title, inForm, item.required) }}
+                {{ fields.cascader(item.name, item.title, true, item.required) }}
               {% endif %}
               {% if item.componentType == 'slider' %}
-                {{ fields.slider(item.name, item.title, inForm, item.required) }}
+                {{ fields.slider(item.name, item.title, true, item.required) }}
               {% endif %}
               {% if item.componentType == 'switch' %}
-                {{ fields.switch(item.name, item.title, inForm, item.required) }}
+                {{ fields.switch(item.name, item.title, true, item.required) }}
               {% endif %}
               {% if item.componentType == 'rate' %}
-                {{ fields.rate(item.name, item.title, inForm, item.required) }}
+                {{ fields.rate(item.name, item.title, true, item.required) }}
               {% endif %}
               {% if item.componentType == 'uploadButton' %}
-                {{ fields.uploadButton(item.name, item.title, inForm, item.required) }}
+                {{ fields.uploadButton(item.name, item.title, true, item.required) }}
               {% endif %}
               {% if item.componentType == 'uploadDragger' %}
-                {{ fields.uploadDragger(item.name, item.title, inForm, item.required) }}
+                {{ fields.uploadDragger(item.name, item.title, true, item.required) }}
               {% endif %}
               {% if item.componentType == 'money' %}
-                {{ fields.money(item.name, item.title, inForm, item.required) }}
+                {{ fields.money(item.name, item.title, true, item.required) }}
               {% endif %}
               {% if item.componentType == 'segment' %}
-                {{ fields.segment(item.name, item.title, inForm, item.required) }}
+                {{ fields.segment(item.name, item.title, true, item.required) }}
               {% endif %}
-            {% endfor %}
-          </ProCard>
-        </Flex>
+            </Col>
+          {% endfor %}
+          </Row>
+        {% endfor %}
       </ProForm>
     </Modal>
   );

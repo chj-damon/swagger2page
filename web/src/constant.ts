@@ -1,6 +1,6 @@
 export const vscode = acquireVsCodeApi();
 
-export const fieldsTypeEnum = {
+export const fieldsTypeEnum: Record<string, { text: string }> = {
   text: {
     text: '文本',
   },

@@ -8,7 +8,7 @@ import {
   type WebviewView,
   type WebviewViewProvider,
 } from 'vscode';
-import { generateFileByTemplate } from './utils/generate';
+import { generateFileByTemplate, getApiInfo } from './utils/generate';
 import { parseOpenapi } from './utils/openapi';
 
 export class SidebarWebView implements WebviewViewProvider {
@@ -57,6 +57,7 @@ export class SidebarWebView implements WebviewViewProvider {
           break;
 
         case 'webview':
+          console.log(message.data);
           this.selectedContent = message.data;
           // 判断currentPanel是否有值
           if (this.currentPanel) {
@@ -127,7 +128,6 @@ export class SidebarWebView implements WebviewViewProvider {
           break;
 
         case 'generate':
-          console.log(message.data);
           const workspaceFolderUri = workspace.workspaceFolders
             ? workspace.workspaceFolders[0].uri
             : undefined;
@@ -152,10 +152,17 @@ export class SidebarWebView implements WebviewViewProvider {
                 'src',
                 'templates',
               ).fsPath;
-              const filePath = await generateFileByTemplate(
+
+              const apiImportPath = await getApiInfo(
+                this.selectedContent?.path,
+              );
+
+              const filePath = generateFileByTemplate(
                 selectedFilePath,
                 templatePath,
                 message.data,
+                apiImportPath,
+                this.selectedContent?.requestName,
               );
               if (!filePath) {
                 window.showErrorMessage('生成失败');
@@ -163,7 +170,7 @@ export class SidebarWebView implements WebviewViewProvider {
                 window.showInformationMessage('生成成功');
                 // vscode打开这个刚刚生成的文件
                 const openPath = Uri.file(filePath);
-                await window.showTextDocument(openPath);
+                window.showTextDocument(openPath);
               }
             } catch (error) {
               window.showErrorMessage((error as unknown as Error).message);

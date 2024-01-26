@@ -1,5 +1,7 @@
+import Title from '@/components/Title';
 import { fieldsTypeEnum, vscode, yesOrNoEnum } from '@/constant';
 import { MessageContext } from '@/context/MessageContext';
+import InputFieldModal from '@/modals/InputFieldModal';
 import { mappingType } from '@/utils';
 import {
   EditableFormInstance,
@@ -7,11 +9,13 @@ import {
   ProCard,
   ProColumns,
   ProForm,
+  ProFormDigit,
   ProFormInstance,
+  ProFormItem,
   ProFormSelect,
-  ProFormSwitch,
   ProFormText,
 } from '@ant-design/pro-components';
+import NiceModal from '@ebay/nice-modal-react';
 import { Col, Row, Space } from 'antd';
 import { useContext, useEffect, useRef, useState } from 'react';
 
@@ -30,39 +34,34 @@ export default function IndexPage() {
     requestName,
   } = pathInfo || {};
 
-  console.log(pathInfo);
-
   const formRef = useRef<ProFormInstance>();
   const editorFormRef = useRef<EditableFormInstance>();
 
-  const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
+  const [editableKeys, setEditableKeys] = useState<React.Key[]>([]);
 
   useEffect(() => {
     if (method === 'get') {
       const items = result.find((item) => item.name === 'data')?.items || [];
-      // 以result作为表单数据
-      formRef.current?.setFieldValue(
-        'config',
-        items.map((item) => ({
-          name: item.name,
-          title: item.label,
-          required: (+item.required).toString(),
-          componentType: mappingType(item.type),
-          visible: '1',
-        })),
-      );
+      const dataSource = items.map((item) => ({
+        name: item.name,
+        title: item.label,
+        required: (+item.required).toString(),
+        componentType: mappingType(item.type),
+        visible: '1',
+      }));
+      formRef.current?.setFieldValue('config', dataSource);
+      setEditableKeys(dataSource.map((item) => item.name));
     } else if (method === 'post') {
-      // 以parameters作为表单数据
-      formRef.current?.setFieldValue(
-        'config',
-        parameters.map((item) => ({
-          name: item.name,
-          title: item.description,
-          required: (+item.required).toString(),
-          componentType: mappingType(item.schema.type),
-          visible: '1',
-        })),
-      );
+      const dataSource = parameters.map((item) => ({
+        name: item.name,
+        title: item.description,
+        required: (+item.required).toString(),
+        componentType: mappingType(item.schema.type),
+        visible: '1',
+      }));
+
+      formRef.current?.setFieldValue('config', dataSource);
+      setEditableKeys(dataSource.map((item) => item.name));
     }
   }, [parameters, result, method]);
 
@@ -117,28 +116,44 @@ export default function IndexPage() {
     {
       title: '操作',
       valueType: 'option',
-      width: 200,
-      render: (__, record, _, action) => [
-        <a
-          key="editable"
-          onClick={() => {
-            action?.startEditable?.(record.name);
-          }}
-        >
-          编辑
-        </a>,
-        <a
-          key="delete"
-          onClick={() => {
-            const dataSource: any[] = formRef.current?.getFieldValue('config');
-            formRef.current?.setFieldsValue({
-              config: dataSource.filter((item) => item.name !== record.name),
-            });
-          }}
-        >
-          删除
-        </a>,
-      ],
+      // 在编辑状态下不显示，编辑保存之后才显示
+      render: (__, record, index, action) => {
+        const editDom = (
+          <a
+            key="editable"
+            onClick={() => {
+              action?.startEditable?.(record.name);
+            }}
+          >
+            编辑
+          </a>
+        );
+
+        // 判断这一行是否可见
+        const isVisible = record.visible === '1';
+
+        const configDom = (
+          <a
+            key="config"
+            onClick={() => {
+              NiceModal.show(InputFieldModal, {
+                ...record,
+                callback(data: any) {
+                  // 将data保存
+                  editorFormRef.current?.setRowData?.(index, {
+                    ...record,
+                    ...data,
+                  });
+                },
+              });
+            }}
+          >
+            配置
+          </a>
+        );
+
+        return isVisible ? [editDom, configDom] : [editDom];
+      },
     },
   ];
 
@@ -149,8 +164,11 @@ export default function IndexPage() {
         onFinish={handleFinish}
         formRef={formRef}
         initialValues={{
-          isForm: true,
-          displayType: 'modal',
+          labelCol: 6,
+          wrapperCol: 18,
+          modalWidth: '800',
+          displayType: 'formModal',
+          layout: '1*2',
         }}
         {...formItemLayout}
         submitter={{
@@ -161,7 +179,7 @@ export default function IndexPage() {
           ),
         }}
       >
-        <ProCard title="基本信息">
+        <ProCard title={<Title text="基本信息" />}>
           <Row>
             <Col span={12}>
               <ProFormText
@@ -172,29 +190,9 @@ export default function IndexPage() {
                     '组件名称是最后生成的文件名称，所以请使用英文驼峰的方式书写',
                 }}
                 required
-                rules={[
-                  { required: true, message: '请输入组件名称' },
-                  {
-                    pattern: /^[A-Z][a-z]+([A-Z][a-z]+)*$/,
-                    message: '请输入英文驼峰的组件名称',
-                  },
-                ]}
+                rules={[{ required: true, message: '请输入组件名称' }]}
               />
             </Col>
-            <Col span={12}>
-              <ProFormSelect
-                name="displayType"
-                label="展示形式"
-                required
-                rules={[{ required: true, message: '请选择展示形式' }]}
-                options={[
-                  { label: '弹窗', value: 'modal' },
-                  { label: '页面', value: 'page' },
-                ]}
-              />
-            </Col>
-          </Row>
-          <Row>
             <Col span={12}>
               <ProFormSelect
                 name="layout"
@@ -209,25 +207,121 @@ export default function IndexPage() {
                 ]}
               />
             </Col>
+          </Row>
+          <Row>
             <Col span={12}>
-              <ProFormSwitch
-                tooltip={{
-                  title:
-                    '是否将组件作为表单使用,如果是,则会自动将组件的配置项转换为表单项',
-                }}
-                name="isForm"
-                label="是否表单"
+              <ProFormSelect
+                name="displayType"
+                label="展示形式"
+                required
+                rules={[{ required: true, message: '请选择展示形式' }]}
+                options={[
+                  { label: '表单弹窗', value: 'formModal' },
+                  { label: '详情弹窗', value: 'detailModal' },
+                  { label: '表单页面', value: 'formPage' },
+                  { label: '详情页面', value: 'detailPage' },
+                  { label: '表格', value: 'table' },
+                ]}
               />
             </Col>
           </Row>
+          <ProFormItem
+            noStyle
+            shouldUpdate={(prevValues, currValues) =>
+              prevValues.displayType !== currValues.displayType
+            }
+          >
+            {({ getFieldValue }) => {
+              const displayType = getFieldValue('displayType');
+              if (displayType === 'formModal' || displayType === 'detailModal')
+                return (
+                  <>
+                    <Row>
+                      <Col span={12}>
+                        <ProFormText
+                          width="lg"
+                          name="modalName"
+                          label={
+                            displayType === 'formModal'
+                              ? '表单弹窗标题'
+                              : '详情弹窗标题'
+                          }
+                          required
+                          rules={[
+                            { required: true, message: '请输入弹窗标题' },
+                          ]}
+                        />
+                      </Col>
+                      <Col span={12}>
+                        <ProFormText
+                          width="lg"
+                          name="modalWidth"
+                          label={'弹窗宽度'}
+                          required
+                          rules={[
+                            { required: true, message: '请输入弹窗宽度' },
+                          ]}
+                          tooltip={{
+                            title: '弹窗宽度，可以是数字或者百分比',
+                          }}
+                        />
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12}>
+                        <ProFormDigit
+                          width="lg"
+                          name="labelCol"
+                          label={'标签宽度'}
+                          tooltip={{ title: '默认值是6' }}
+                        />
+                      </Col>
+                      <Col span={12}>
+                        <ProFormDigit
+                          width="lg"
+                          name="wrapperCol"
+                          label={'控件宽度'}
+                          tooltip={{ title: '默认值是18' }}
+                        />
+                      </Col>
+                    </Row>
+                  </>
+                );
+
+              if (displayType === 'formPage' || displayType === 'detailPage')
+                return (
+                  <Row>
+                    <Col span={12}>
+                      <ProFormDigit
+                        width="lg"
+                        name="labelCol"
+                        label={'标签宽度'}
+                        tooltip={{ title: '默认值是6' }}
+                      />
+                    </Col>
+                    <Col span={12}>
+                      <ProFormDigit
+                        width="lg"
+                        name="wrapperCol"
+                        label={'控件宽度'}
+                        tooltip={{ title: '默认值是18' }}
+                      />
+                    </Col>
+                  </Row>
+                );
+
+              return null;
+            }}
+          </ProFormItem>
         </ProCard>
-        <ProCard title="字段配置">
+        <ProCard title={<Title text="字段配置" />}>
           <EditableProTable
             rowKey="name"
             editableFormRef={editorFormRef}
             name="config"
             scroll={{
               x: 960,
+              y: 400,
             }}
             formItemProps={{
               labelCol: { span: 0 },
@@ -238,7 +332,11 @@ export default function IndexPage() {
             editable={{
               type: 'multiple',
               editableKeys,
-              onChange: setEditableRowKeys,
+              form: formRef.current,
+              onChange: setEditableKeys,
+              onSave: async (key, row, originRow) => {
+                console.log('onSave', key, row, originRow);
+              },
             }}
           />
         </ProCard>

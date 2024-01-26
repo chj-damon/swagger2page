@@ -32,29 +32,29 @@ const {{name}} = () => {
   };
 
   return (
-    <Space direction="vertical" size={'middle'} style={% raw %}{{ display: 'flex', flex: 1 }}{% endraw %}>
-      <div />
-      <ProCard title={<Title text="新建商品" />}>
-        <ProForm
-          layout="horizontal"
-          formRef={formRef}
-          labelCol={% raw %}{{{% endraw %} span: {{labelCol}} {% raw %}}}{% endraw %}
-          wrapperCol={% raw %}{{{% endraw %} span: {{wrapperCol}} {% raw %}}}{% endraw %}
-          onFinish={handleFinish}
-          autoFocusFirstInput={false}
-          submitter={% raw %}{{{% endraw %}
-            render: (_, doms) => {
-              return (
-                <ProCard>
-                  <Space>{doms}</Space>
-                </ProCard>
-              );
-            },
-          {% raw %}}}{% endraw %}
-        >
-          {% for item in hiddenItems %}
-            <ProFormText name="{{item.name}}" hidden />
-          {% endfor %}
+    <ProForm
+      layout="horizontal"
+      formRef={formRef}
+      labelCol={% raw %}{{{% endraw %} span: {{labelCol}} {% raw %}}}{% endraw %}
+      wrapperCol={% raw %}{{{% endraw %} span: {{wrapperCol}} {% raw %}}}{% endraw %}
+      onFinish={handleFinish}
+      autoFocusFirstInput={false}
+      submitter={% raw %}{{{% endraw %}
+        render: (_, doms) => {
+          return (
+            <ProCard>
+              <Space>{doms}</Space>
+            </ProCard>
+          );
+        },
+      {% raw %}}}{% endraw %}
+    >
+      {% for item in hiddenItems %}
+        <ProFormText name="{{item.name}}" hidden />
+      {% endfor %}
+      <Space direction="vertical" size={'middle'} style={{{% endraw %}{{ display: 'flex' }}{% endraw %}>>
+        <div />
+        <ProCard title={<Title text="设备基础信息" />}>
           {% for list in items %}
             <Row gutter={16}>
             {% for item in list %}
@@ -132,9 +132,9 @@ const {{name}} = () => {
             {% endfor %}
             </Row>
           {% endfor %}
-        </ProForm>
-      </ProCard>
-    </Space>
+        </ProCard>
+      </Space>
+    </ProForm>
   );
 };
 

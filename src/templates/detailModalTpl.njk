@@ -12,13 +12,14 @@ import { useRequest } from 'ahooks';
 import { Flex, Modal, Row, Col } from 'antd';
 
 import { {{requestName}} } from '{{apiImportPath}}';
+import Container from '@/components/Container';
 
-const {{name}} = (props: { id?: string }) => {
+const {{name}} = (props: any) => {
   const modal = useModal();
   const formRef = useRef<ProFormInstance>();
 
-  const { data, loading } = useRequest(
-    () => {{requestName}}({% raw %}{{ id: props.id! }}{% endraw %}),
+  const { loading } = useRequest(
+    () => {{requestName}}({ id: props.id! }),
     {
       ready: !!props.id && modal.visible,
       onSuccess: (result) => {
@@ -29,8 +30,8 @@ const {{name}} = (props: { id?: string }) => {
 
   return (
     <Modal
-      title={'申请状态'}
-      width={1200}
+      title="{{modalName}}"
+      width={{ modalWidth | percent }}
       centered
       destroyOnClose
       forceRender
@@ -40,91 +41,93 @@ const {{name}} = (props: { id?: string }) => {
       okText="确定"
       onOk={modal.hide}
     >
-      <ProForm
-        layout="horizontal"
-        formRef={formRef}
-        labelCol={% raw %}{{ span: 6 }}{% endraw %}
-        wrapperCol={% raw %}{{ span: 18 }}{% endraw %}
-        submitter={false}
-      >
-        {% for list in items %}
-          <Row gutter={16}>
-          {% for item in list %}
-            <Col span={{ colSpan | curly }}>
-              {% if item.componentType == 'text' %}
-                {{ fields.text(item.name, item.title, true, item.required) }}
-              {% endif %}
-              {% if item.componentType == 'captcha' %}
-                {{ fields.captcha(item.name, item.title, true, item.required) }}
-              {% endif %}
-              {% if item.componentType == 'password' %}
-                {{ fields.password(item.name, item.title, true, item.required) }}
-              {% endif %}
-              {% if item.componentType == 'digit' %}
-                {{ fields.digit(item.name, item.title, true, item.required) }}
-              {% endif %}
-              {% if item.componentType == 'digitRange' %}
-                {{ fields.digitRange(item.name, item.title, true, item.required) }}
-              {% endif %}
-              {% if item.componentType == 'textarea' %}
-                {{ fields.textarea(item.name, item.title, true, item.required) }}
-              {% endif %}
-              {% if item.componentType == 'date' %}
-                {{ fields.date(item.name, item.title, true, item.required) }}
-              {% endif %}
-              {% if item.componentType == 'dateTime' %}
-                {{ fields.dateTime(item.name, item.title, true, item.required) }}
-              {% endif %}
-              {% if item.componentType == 'dateRange' %}
-                {{ fields.dateRange(item.name, item.title, true, item.required) }}
-              {% endif %}
-              {% if item.componentType == 'dateTimeRange' %}
-                {{ fields.dateTimeRange(item.name, item.title, true, item.required) }}
-              {% endif %}
-              {% if item.componentType == 'time' %}
-                {{ fields.time(item.name, item.title, true, item.required) }}
-              {% endif %}
-              {% if item.componentType == 'select' %}
-                {{ fields.select(item.name, item.title, true, item.required) }}
-              {% endif %}
-              {% if item.componentType == 'treeSelect' %}
-                {{ fields.treeSelect(item.name, item.title, true, item.required) }}
-              {% endif %}
-              {% if item.componentType == 'checkbox' %}
-                {{ fields.checkbox(item.name, item.title, true, item.required) }}
-              {% endif %}
-              {% if item.componentType == 'radio' %}
-                {{ fields.radio(item.name, item.title, true, item.required) }}
-              {% endif %}
-              {% if item.componentType == 'cascader' %}
-                {{ fields.cascader(item.name, item.title, true, item.required) }}
-              {% endif %}
-              {% if item.componentType == 'slider' %}
-                {{ fields.slider(item.name, item.title, true, item.required) }}
-              {% endif %}
-              {% if item.componentType == 'switch' %}
-                {{ fields.switch(item.name, item.title, true, item.required) }}
-              {% endif %}
-              {% if item.componentType == 'rate' %}
-                {{ fields.rate(item.name, item.title, true, item.required) }}
-              {% endif %}
-              {% if item.componentType == 'uploadButton' %}
-                {{ fields.uploadButton(item.name, item.title, true, item.required) }}
-              {% endif %}
-              {% if item.componentType == 'uploadDragger' %}
-                {{ fields.uploadDragger(item.name, item.title, true, item.required) }}
-              {% endif %}
-              {% if item.componentType == 'money' %}
-                {{ fields.money(item.name, item.title, true, item.required) }}
-              {% endif %}
-              {% if item.componentType == 'segment' %}
-                {{ fields.segment(item.name, item.title, true, item.required) }}
-              {% endif %}
-            </Col>
+      <Container loading={loading}>
+        <ProForm
+          layout="horizontal"
+          formRef={formRef}
+          labelCol={% raw %}{{ span: 6 }}{% endraw %}
+          wrapperCol={% raw %}{{ span: 18 }}{% endraw %}
+          submitter={false}
+        >
+          {% for list in items %}
+            <Row gutter={16}>
+            {% for item in list %}
+              <Col span={{ colSpan | curly }}>
+                {% if item.componentType == 'text' %}
+                  {{ fields.text(item.name, item.title, true, item.required) }}
+                {% endif %}
+                {% if item.componentType == 'captcha' %}
+                  {{ fields.captcha(item.name, item.title, true, item.required) }}
+                {% endif %}
+                {% if item.componentType == 'password' %}
+                  {{ fields.password(item.name, item.title, true, item.required) }}
+                {% endif %}
+                {% if item.componentType == 'digit' %}
+                  {{ fields.digit(item.name, item.title, true, item.required) }}
+                {% endif %}
+                {% if item.componentType == 'digitRange' %}
+                  {{ fields.digitRange(item.name, item.title, true, item.required) }}
+                {% endif %}
+                {% if item.componentType == 'textarea' %}
+                  {{ fields.textarea(item.name, item.title, true, item.required) }}
+                {% endif %}
+                {% if item.componentType == 'date' %}
+                  {{ fields.date(item.name, item.title, true, item.required) }}
+                {% endif %}
+                {% if item.componentType == 'dateTime' %}
+                  {{ fields.dateTime(item.name, item.title, true, item.required) }}
+                {% endif %}
+                {% if item.componentType == 'dateRange' %}
+                  {{ fields.dateRange(item.name, item.title, true, item.required) }}
+                {% endif %}
+                {% if item.componentType == 'dateTimeRange' %}
+                  {{ fields.dateTimeRange(item.name, item.title, true, item.required) }}
+                {% endif %}
+                {% if item.componentType == 'time' %}
+                  {{ fields.time(item.name, item.title, true, item.required) }}
+                {% endif %}
+                {% if item.componentType == 'select' %}
+                  {{ fields.select(item.name, item.title, true, item.required) }}
+                {% endif %}
+                {% if item.componentType == 'treeSelect' %}
+                  {{ fields.treeSelect(item.name, item.title, true, item.required) }}
+                {% endif %}
+                {% if item.componentType == 'checkbox' %}
+                  {{ fields.checkbox(item.name, item.title, true, item.required) }}
+                {% endif %}
+                {% if item.componentType == 'radio' %}
+                  {{ fields.radio(item.name, item.title, true, item.required) }}
+                {% endif %}
+                {% if item.componentType == 'cascader' %}
+                  {{ fields.cascader(item.name, item.title, true, item.required) }}
+                {% endif %}
+                {% if item.componentType == 'slider' %}
+                  {{ fields.slider(item.name, item.title, true, item.required) }}
+                {% endif %}
+                {% if item.componentType == 'switch' %}
+                  {{ fields.switch(item.name, item.title, true, item.required) }}
+                {% endif %}
+                {% if item.componentType == 'rate' %}
+                  {{ fields.rate(item.name, item.title, true, item.required) }}
+                {% endif %}
+                {% if item.componentType == 'uploadButton' %}
+                  {{ fields.uploadButton(item.name, item.title, true, item.required) }}
+                {% endif %}
+                {% if item.componentType == 'uploadDragger' %}
+                  {{ fields.uploadDragger(item.name, item.title, true, item.required) }}
+                {% endif %}
+                {% if item.componentType == 'money' %}
+                  {{ fields.money(item.name, item.title, true, item.required) }}
+                {% endif %}
+                {% if item.componentType == 'segment' %}
+                  {{ fields.segment(item.name, item.title, true, item.required) }}
+                {% endif %}
+              </Col>
+            {% endfor %}
+            </Row>
           {% endfor %}
-          </Row>
-        {% endfor %}
-      </ProForm>
+        </ProForm>
+      </Container>
     </Modal>
   );
 };

@@ -1,0 +1,167 @@
+import { useRef } from 'react';
+
+import { PlusOutlined } from '@ant-design/icons';
+import { ActionType, ProCard, ProColumns, ProTable } from '@ant-design/pro-components';
+import NiceModal from '@ebay/nice-modal-react';
+import { Space } from 'antd';
+
+import { deleteRole, getRolePage } from '@/api/system/guanlihoutaijiaose';
+import LinkButtons from '@/components/LinkButtons';
+import PrivilegeButton from '@/components/PrivilegeButton';
+import Title from '@/components/Title';
+import { DICT_TYPE, getIntDictEnum } from '@/utils/dict';
+
+import ModifyRoleModal from '../components/ModifyRoleModal';
+import RoleDataPermissionModal from '../components/RoleDataPermissionModal';
+import RoleMenuPermissionModal from '../components/RoleMenuPermissionModal';
+
+export default () => {
+  const actionRef = useRef<ActionType>();
+
+  const columns: ProColumns<API.RoleDO>[] = [
+    {
+      title: '角色名称',
+      dataIndex: 'name',
+    },
+    {
+      title: '角色标识',
+      dataIndex: 'code',
+      hideInSearch: true,
+    },
+    {
+      title: '显示顺序',
+      dataIndex: 'sort',
+      hideInSearch: true,
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      valueType: 'select',
+      valueEnum: getIntDictEnum(DICT_TYPE.COMMON_STATUS),
+    },
+    {
+      title: '备注',
+      dataIndex: 'remark',
+      ellipsis: true,
+      hideInSearch: true,
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'createTime',
+      valueType: 'dateTime',
+      hideInSearch: true,
+      width: '15%',
+    },
+    {
+      title: '操作',
+      dataIndex: 'option',
+      valueType: 'option',
+      width: '22%',
+      render: (_, record) => (
+        <LinkButtons
+          maxNumber={4}
+          buttons={[
+            {
+              key: 'menu',
+              name: '菜单权限',
+              permission: 'system:permission:assign-role-menu',
+              onClick: () => {
+                NiceModal.show(RoleMenuPermissionModal, {
+                  ...record,
+                  callback() {
+                    actionRef.current?.reload();
+                  },
+                });
+              },
+            },
+            {
+              key: 'data',
+              name: '数据权限',
+              permission: 'system:permission:assign-role-data-scope',
+              onClick: () => {
+                NiceModal.show(RoleDataPermissionModal, {
+                  ...record,
+                  callback() {
+                    actionRef.current?.reload();
+                  },
+                });
+              },
+            },
+            {
+              key: 'edit',
+              name: '修改',
+              permission: 'system:role:update',
+              onClick: () => {
+                NiceModal.show(ModifyRoleModal, {
+                  ...record,
+                  callback() {
+                    actionRef.current?.reload();
+                  },
+                });
+              },
+            },
+            {
+              key: 'delete',
+              name: '删除',
+              permission: 'system:role:delete',
+              danger: true,
+              showConfirm: true,
+              confirmTitle: '删除角色',
+              confirmDescription: '您确定删除这条角色数据吗?',
+              onClick: async () => {
+                try {
+                  await deleteRole({ id: record.id! });
+                  actionRef.current?.reload();
+                } catch (error) {
+                  console.error(error);
+                }
+              },
+            },
+          ]}
+        />
+      ),
+    },
+  ];
+
+  return (
+    <Space direction="vertical" size={'middle'} style={{ display: 'flex' }}>
+      <div />
+      <ProCard title={<Title text="角色列表" />}>
+        <ProTable
+          actionRef={actionRef}
+          columns={columns}
+          cardBordered
+          request={async params => {
+            const result = await getRolePage({
+              ...params,
+              pageNo: params.current,
+            } as API.getRolePageParams);
+            return {
+              success: true,
+              data: result.data?.list || [],
+              total: result.data?.total,
+            };
+          }}
+          rowKey={record => record.id!}
+          toolBarRender={() => [
+            <PrivilegeButton
+              key="add"
+              type="primary"
+              permission="system:role:create"
+              onClick={() =>
+                NiceModal.show(ModifyRoleModal, {
+                  callback() {
+                    actionRef.current?.reload();
+                  },
+                })
+              }
+              icon={<PlusOutlined />}
+            >
+              新建
+            </PrivilegeButton>,
+          ]}
+        />
+      </ProCard>
+    </Space>
+  );
+};

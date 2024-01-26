@@ -173,6 +173,7 @@ export class SidebarWebView implements WebviewViewProvider {
                 window.showTextDocument(openPath);
               }
             } catch (error) {
+              console.error(error);
               window.showErrorMessage((error as unknown as Error).message);
             }
           }
